@@ -69,7 +69,7 @@
           <p align="left" style="padding-top: 20px; font-size: 25px">
             JavaScript objects are dynamic bags of properties (referred to as own properties). JavaScript objects have a link to a <em>prototype object</em>. When trying to access a property of an object, the property will not only be sought on the object but on the prototype of the object, the prototype of the prototype, and so on until either a property with a matching name is found or the end of the prototype chain is reached.
           </p>
-          <pre><code data-trim data-noescape>
+          <pre><code style="max-height:600px!important;">
 var o = {a: 1};
 
 // The newly created object o has Object.prototype as its
@@ -97,7 +97,7 @@ function f(){
         </section>
         <section>
           <h5>Creating Object Hierarchy in JS</h5>
-          <pre><code data-trim data-noescape>
+          <pre><code style="max-height:600px!important;" data-trim data-noescape>
 function Employee() {
   this.name = "";
   this.dept = "general";
