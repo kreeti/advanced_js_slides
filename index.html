@@ -66,12 +66,11 @@
         </section>
         <section>
           <h4>Prototype chain</h4>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
+          <p align="left" style="padding-top: 10px; font-size: 22px">
             JavaScript objects are dynamic bags of properties (referred to as own properties). JavaScript objects have a link to a <em>prototype object</em>. When trying to access a property of an object, the property will not only be sought on the object but on the prototype of the object, the prototype of the prototype, and so on until either a property with a matching name is found or the end of the prototype chain is reached.
           </p>
-          <pre><code style="max-height:600px;">
+          <pre><code style="max-height:600px!important;">
 var o = {a: 1};
-
 // The newly created object o has Object.prototype as its
 // [[Prototype]]. o has no own property named 'hasOwnProperty'
 // hasOwnProperty is an own property of Object.prototype.
@@ -80,7 +79,6 @@ var o = {a: 1};
 // o ---> Object.prototype ---> null
 
 var a = ["yo", "whadup", "?"];
-
 // Arrays inherit from Array.prototype
 // (which has methods like indexOf, forEach, etc.)
 // The prototype chain looks like:
@@ -89,7 +87,6 @@ var a = ["yo", "whadup", "?"];
 function f(){
   return 2;
 }
-
 // Functions inherit from Function.prototype
 // (which has methods like call, bind, etc.)
 // f ---> Function.prototype ---> Object.prototype ---> null
@@ -97,7 +94,7 @@ function f(){
         </section>
         <section>
           <h5>Creating Object Hierarchy in JS</h5>
-          <pre><code style="max-height:600px;" data-trim data-noescape>
+          <pre><code style="max-height:600px!important;" data-trim data-noescape>
 function Employee() {
   this.name = "";
   this.dept = "general";
