@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>Advanced Javascript &amp; ES6</title>
+    <title>Advanced javascript</title>
 
     <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/black.css">
@@ -20,200 +20,345 @@
       link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
       document.getElementsByTagName( 'head' )[0].appendChild( link );
     </script>
+    <style>
+      ul {
+        display: block!important;
+      }
+      .reveal pre code {
+        max-height: 250px!important;
+        font-size: 15px!important;
+      }
+    </style>
   </head>
   <body>
     <div class="reveal">
       <div class="slides">
         <section>
           <h2>Advanced Javascript &amp; ES6</h2>
-          <h5 style="text-transform:none">by Surendra Singhi</h5>
-          <p>CEO & Founder at Kreeti Technologies</p>
+          <h5 style="text-transform:none">by Sukanta Mangal</h5>
+          <p>Web Engineer at Kreeti Technologies</p>
         </section>
         <section>
-          <h6 style="text-transform:none">Special Thanks to Nabarun
-          Banerjee for helping in making the slides.</h6>
-        </section>
-        <section>
-          <h4>Functional Programing Paradigm</h4>
-          <p align="left" style="padding-top: 20px;">
-            A style of building the structure and elements of computer programs—that treats computation as the evaluation of mathematical functions and avoids changing-state and mutable data.
-          </p>
-          <p align="left" style="padding-top: 20px;">
-            In mathematics, a function is a relation between a set of inputs and a set of permissible outputs with the property that each input is related to exactly one output.
-          </p>
-        </section>
-
-        <section>
-          <h4>Side effect</h4>
-          <p align="left" style="padding-top: 20px;">
-            A function or expression is said to have a side effect if it modifies some state or has an observable interaction with calling functions or the outside world.
-          </p>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-            For example, this function has no side effects. Its result depends only on its input arguments, and nothing about the state of the program or its environment changes when it is called:
-          </p>
-          <pre><code data-trim data-noescape>
-              int square(int x) { return x * x; }
-          </code></pre>
-
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-            In contrast, calling these functions will give you different results depending upon the order in which you call them, because they change something about the state of the computer:
-          </p>
-          <pre><code data-trim data-noescape>
-int n = 0;
-int next_n() { return n++; }
-void set_n(int newN) { n = newN; }
-          </code></pre>
-
-        </section>
-
-        <section>
-          <h4>Pure function</h4>
-
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-             In programming, a function may be considered a pure function if both of the following statements about the function hold:
-          </p>
-
-          <ul style="font-size: 25px">
-            <li style="padding-bottom: 10px;">
-              The function always evaluates the same result value given the same argument value(s). The function result value cannot depend on any hidden information or state that may change while program execution proceeds or between different executions of the program, nor can it depend on any external input from I/O devices.
+          <p style="font-size:50px;">Topics</p>
+          <ul>
+            <li>
+              1: Prototype
             </li>
             <li>
-              Evaluation of the result does not cause any semantically observable side effect or output, such as mutation of mutable objects or output to I/O devices.
+              2: DOM and Event
+            </li>
+            <li>
+              3: ES6 features
+            </li>
+            <li>
+              4: JQUERY
             </li>
           </ul>
-
+        </section>
+        <section>
+          <h4>Prototype based programing using JS</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px">
+           JavaScript is an object-based language based on prototypes, rather than being class-based.A prototype is an object from which other objects inherit properties
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px">
+      JavaScript only has objects. A prototype-based language has the notion of a prototypical object, an object used as a template from which to get the initial properties for a new object. Any object can specify its own properties, either when you create it or at run time. In addition, any object can be associated as the prototype for another object, allowing the second object to share the first object's properties.
+          </p>
+        </section>
+        <section>
+          <h4>Prototype chain</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px">
+            JavaScript objects are dynamic bags of properties (referred to as own properties). JavaScript objects have a link to a <em>prototype object</em>. When trying to access a property of an object, the property will not only be sought on the object but on the prototype of the object, the prototype of the prototype, and so on until either a property with a matching name is found or the end of the prototype chain is reached.
+          </p>
           <pre><code data-trim data-noescape>
-var values = { a: 1 };
+var o = {a: 1};
 
-function pureFunction ( a ) {
-  var b = 2;
-  a = a * b + 2;
+// The newly created object o has Object.prototype as its
+// [[Prototype]]. o has no own property named 'hasOwnProperty'
+// hasOwnProperty is an own property of Object.prototype.
+// So o inherits hasOwnProperty from Object.prototype
+// Object.prototype has null as its prototype.
+// o ---> Object.prototype ---> null
 
-  return a;
+var a = ["yo", "whadup", "?"];
+
+// Arrays inherit from Array.prototype
+// (which has methods like indexOf, forEach, etc.)
+// The prototype chain looks like:
+// a ---> Array.prototype ---> Object.prototype ---> null
+
+function f(){
+  return 2;
 }
 
-var c = pureFunction( values.a );
-// `values.a` has not been modified, it's still 1
+// Functions inherit from Function.prototype
+// (which has methods like call, bind, etc.)
+// f ---> Function.prototype ---> Object.prototype ---> null
+          </code></pre>
+        </section>
+        <section>
+          <h5>Creating Object Hierarchy in JS</h5>
+          <pre><code data-trim data-noescape>
+function Employee() {
+  this.name = "";
+  this.dept = "general";
+}
+
+function Manager() {
+  Employee.call(this);
+  this.reports = [];
+}
+
+Manager.prototype = Object.create(Employee.prototype);
+
+function WorkerBee() {
+  Employee.call(this);
+  this.projects = [];
+}
+
+WorkerBee.prototype = Object.create(Employee.prototype);
+
+function SalesPerson() {
+  WorkerBee.call(this);
+  this.dept = "sales";
+  this.quota = 100;
+}
+
+SalesPerson.prototype = Object.create(WorkerBee.prototype);
+
+function Engineer() {
+  WorkerBee.call(this);
+  this.dept = "engineering";
+  this.machine = "";
+}
+
+Engineer.prototype = Object.create(WorkerBee.prototype);
+          </code></pre>
+        </section>
+        <section>
+          <h4>What is ES ?</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            ECMAScript (ES) is a scripting language specification standardized by ECMAScript International. It is used by applications to enable client-side scripting. Languages like JavaScript, Jscript and ActionScript are governed by this specification. This tutorial introduces you to ES6 implementation in JavaScript
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            We will going to discussed following new ES6 features:
+          </p>
+          <ul style="font-size: 22px;">
+            <li>
+              1: Let and Const variable
+            <li>
+              2: Arrow Functions
+            </li>
+            <li>
+              3: Destructing
+            </li>
+            <li>
+              4: Promises
+            </li>
+            <li>
+              6: Classes
+            </li>
+            <li>
+              8: Generator
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Let and Block scope</h4>
+
+          <p align="left" style="padding-top: 20px; font-size: 25px">
+             The block scope restricts a variable’s access to the block in which it is declared. The var keyword assigns a function scope to the variable. Unlike the var keyword, the let keyword allows the script to restrict access to the variable to the nearest enclosing block. We can't declared again a variable that has been already declared using Let keywork.
+          </p>
+
+          <pre><code data-trim data-noescape>
+&lt;script language="javascript" type="text/javascript"&gt;
+// let scope
+function printNum() {
+  for(let i = 0; i < 10; i++) {
+    console.log(i);
+  }
+  console.log(i);
+}
+printNum();
+&lt;/script&gt;
             </code></pre>
 
         </section>
         <section>
-          <h4>Higher-order functions</h4>
+          <h4>The Const</h4>
           <p align="left" style="padding-top: 20px; font-size: 25px">
-            Functions that operate on other functions, either by taking them as arguments or by returning them, are called higher-order functions.
-            <br />
-            These allow us to abstract over actions, not just values.
+            The const declaration creates a read-only reference to a value. It does not mean the value it holds is immutable, just that the variable identifier cannot be reassigned. Constants are block-scoped, much like variables defined using the let statement. The value of a constant cannot change through re-assignment, and it can't be re-declared.
           </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px">
+            The following rules hold true for a variable declared using the const keyword −
+          </p>
+          <ul style="font-size: 23px">
+            <li>
+              Constants cannot be reassigned a value.
+            </li>
+            <li>
+              A constant cannot be re-declared.
+            </li>
+            <li>
+              A constant requires an initializer. This means constants must be initialized during its declaration.
+            </li>
+            <li>
+              The value assigned to a const variable is mutable.
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4> => Arrow functions</h4>
+          <p align="left" style="padding-top: 10px; font-size: 22px">
+            An arrow function expression has a shorter syntax compared to function expressions and lexically binds the <em>this</em> value
+          </p>
+          <pre><code style="font-size: 22px">
+(param1, param2, …, paramN) => { statements }
+(param1, param2, …, paramN) => expression
+// equivalent to:  => { return expression; }
 
-          <pre><code data-trim data-noescape>
-function greaterThan(n) {
-  return function(m) { return m > n; };
-}
+// Parentheses are optional when there's only one parameter:
+(singleParam) => { statements }
+singleParam => { statements }
 
-var greaterThan10 = greaterThan(10);
-console.log(greaterThan10(11));
-// → true
-          </code></pre>
-
-          <pre><code data-trim data-noescape>
-var items = [
-{ name: 'Edward', value: 21 },
-{ name: 'Sharpe', value: 37 },
-{ name: 'And', value: 45 },
-{ name: 'The', value: -12 },
-{ name: 'Magnetic' },
-{ name: 'Zeros', value: 37 }
-];
-
-// sort by value
-items.sort(function (a, b) { return a.value > b.value; });
+// A function with no parameters requires parentheses:
+() => { statements }
           </code></pre>
         </section>
         <section>
-          <h4>Anonymous function</h4>
-
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-            An anonymous function is a function definition that is not bound to an identifier.
+          <h4> => Arrow functions contd...</h4>
+          <p align="left" style="font-size: 22px">
+            Arrow functions – also called “fat arrow” functions, from CoffeeScript (a transcompiled language) are a more concise syntax for writing function expressions. They utilize a new token, "=>", that looks like a fat arrow. Arrow functions are anonymous and change the way "this" binds in functions.
+          </p>
+          <ul style="font-size: 22px">
+            <li align="left" style="padding-top: 20px; font-size: 22px">
+              Curly brackets are not required if only one expression is present.
+            </li>
+            <li align="left" style="padding-top: 20px; font-size: 22px">
+              Parentheses are optional when only one parameter is present
+            </li>
+            <li align="left" style="padding-top: 20px; font-size: 22px">
+              Parentheses are required when no parameters are present.
+            </li>
+            <li align="left" style="padding-top: 20px; font-size: 22px">
+              Rest parameters and default parameters are supported.
+            </li>
+            <lialign="left" style="padding-top: 20px; font-size: 22px">
+              Parenthesize the body to return an object literal expression
+            </li>
+            <li align="left" style="padding-top: 20px; font-size: 22px">
+              Destructuring within the parameter list is also supported
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Use Cases for Arrow Functions</h4>
+          <p align="left" style="font-size: 22px">
+            Two factors influenced the introduction of arrow functions: shorter functions and non-binding of this.
           </p>
 
-          <p align="left" style="padding-top: 20px; font-size: 25px">Normal function definition:</p>
+          <ul>
+            <li align="left" style="padding-top: 20px; font-size: 22px">
+              Map, filter, reduce
+            </li>
+            <li align="left" style="padding-top: 20px; font-size: 22px">
+              Promises and Callbacks
+            </li>
+            <li align="left" style="padding-top: 20px; font-size: 22px">
+              The other benefit of using arrow functions with promises/callbacks is that it reduces the confusion surrounding the "this" keyword. In code with multiple nested functions, it can be difficult to keep track of and remember to bind the correct this context. In ES5, you can use workarounds like the .bind method (which is slow) or creating a closure using var self = this;.
 
-          <pre><code data-trim data-noescape>
-function hello() {
- alert('Hello world');
-}
-
-hello();
+Because arrow functions allow you to retain the scope of the caller inside the function, you don’t need to create self = this closures or use bind.
+            </li>
+            <li align="left" style="padding-top: 20px; font-size: 22px">
+              Arrow functions used as methods
+            </li>
+          </ul>
+          <p align="left" style="font-size: 22px">
+            Arrow functions cannot be used as "constructors" because don’t have a prototype property or other internal methods. Because constructors are generally used to create classlike objects in JavaScript, you should use the new ES6 classes instead. Arrow functions are designed to be lightweight and cannot be used as "generators". Using the yield keyword in ES6 will throw an error. Use ES6 generators instead.
+          </p>
+        </section>
+        <section>
+          <h4> => Arrow functions contd...</h4>
+          <pre><code style="font-size: 22px">
+var numbers = [1, 4, 9];
+var doubled = numbers.map(x => 2 * x);
+// doubled is now [2, 8, 18], numbers is still [1, 4, 9]
           </code></pre>
 
-          <p align="left" style="padding-top: 20px; font-size: 25px">Anonymous function definition:</p>
-
           <pre><code data-trim data-noescape>
-var anon = function() {
- alert('I am anonymous');
-};
+var kvArray = [{key:1, value:10}, {key:2, value:20}, {key:3, value: 30}];
 
-anon();
+var reformattedArray = kvArray.map((obj) => {
+  var rObj = {};
+  rObj[obj.key] = obj.value;
+  return rObj;
+});
+
+// reformattedArray is now [{1: 10}, {2: 20}, {3: 30}],
+// kvArray is still [{key: 1, value: 10}, {key: 2, value: 20}, {key: 3, value: 30}]
           </code></pre>
         </section>
         <section>
-          <h3><span style="text-transform:none"><em>this</em></span> in JS</h3>
-          <h6>Global context</h6>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-            In the global execution context (outside of any function), this refers to the global object
+          <h4>Destructuring assignment</h4>
+          <p align="left" style="padding-top: 20px; font-size: 22px">
+            The destructuring assignment syntax is a JavaScript expression that makes it possible to extract data from arrays or objects into distinct variables.
           </p>
-          <pre><code data-trim data-noescape>
-console.log(this.document === document); // true
-
-// In web browsers, the window object is also the global object:
-console.log(this === window); // true
-
-this.a = 37;
-console.log(window.a); // 37
-          </code></pre>
-          <h6>Function context - Simple call</h6>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-            Inside a function, the value of <em>this</em> depends on how the function is called. In this case, the value of <em>this</em> is not set by the call. The value of <em>this</em> must always be an object so it defaults to the global object.
-          </p>
-          <pre><code data-trim data-noescape>
-function f1() { return this; }
-f1() === window; // global object
-          </code></pre>
         </section>
         <section>
-          <h3><span style="text-transform:none"><em>this</em> continued..</span></h3>
-          <h5>Object method</h5>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-            When a function is called as a method of an object, its <em>this</em> is set to the object the method is called on.
-            In the following example, when <em>o.f()</em> is invoked, inside the function <em>this</em> is bound to the o object.
-          </p>
-          <pre><code data-trim data-noescape>
-var o = {
-  prop: 37,
-  f: function() { return this.prop; }
-};
-console.log(o.f()); // logs 37
-          </code></pre>
+          <h4>Array destructuring</h4>
+          <ul style="font-size: 22px">
+            <li>
+              <pre><code style="max-height:600px!important;">
+var foo = ['one', 'two', 'three'];
+var [one, two, three] = foo; //Basic variable assignment
+
+var a, b;
+[a, b] = [1, 2]; //Assignment separate from declaration
+[a=5, b=7] = [1]; //Default values
+
+var a = 1; var b = 3;
+[a, b] = [b, a]; //Swapping variables
+
+function f() { return [1, 2]; }
+var a, b;
+[a, b] = f(); // Parsing an array returned from a function
+
+function f() { return [1, 2, 3]; }
+var [a, , b] = f(); //Ignoring some returned values
+
+var [a, ...b] = [1, 2, 3]; //Assigning the rest of an array to a variable
+var [a, ...b,] = [1, 2, 3]; //SyntaxError: rest element may not have a trailing comma
+
+var url = 'https://developer.mozilla.org/en-US/Web/JavaScript';
+var parsedURL = /^(\w+)\:\/\/([^\/]+)\/(.*)$/.exec(url);
+console.log(parsedURL);
+var [, protocol, fullhost, fullpath] = parsedURL; // Pulling values from a regular expression match
+              </code></pre>
+            </li>
+          </ul>
         </section>
         <section>
-          <h3><span style="text-transform:none"><em>this</em> continued..</span></h3>
-          <h5>As a constructor</h5>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-           When a function is used as a constructor (with the new keyword), its <em>this</em> is bound to the new object being constructed.
-          </p>
-          <pre><code data-trim data-noescape>
-function C() {
-  this.a = 37;
+          <h3>Object destructuring</h3>
+          <ul style="font-size: 22px">
+            <li>
+              <pre><code style="max-height:600px!important;">
+var o = {p: 42, q: true};
+var {p, q} = o; //Basic variable assignment
 
-// If the function has a return statement that returns an object,
-// that object will be the result of the |new| expression.
-// Otherwise, the result of the expression is the object currently
-// bound to |this| (i.e., the common case most usually seen).
-}
+var a, b;
+({a, b} = {a: 1, b: 2}); //Assignment without declaration
 
-var o = new C();
-console.log(o.a); // logs 37
-          </code></pre>
+var o = {p: 42, q: true};
+var {p: foo, q: bar} = o; //Assigning to new variable names
+
+var {a = 10, b = 5} = {a: 3}; // Default values
+
+function drawES2015Chart({size = 'big', cords = {x: 0, y: 0}, radius = 25} = {}) { ... } //Setting a function parameter's default value
+
+let key = 'z';
+let {[key]: foo} = {z: 'bar'}; //Computed object property names and destructuring
+              </code></pre>
+            </li>
+          </ul>
         </section>
         <section>
           <h5>call <span style="text-transform:none">versus</span> apply</h5>
@@ -365,155 +510,6 @@ var reformattedArray = kvArray.map(function(obj){
           </table>
         </section>
         <section>
-          <h4> => Arrow functions</h4>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-            An arrow function expression has a shorter syntax compared to function expressions and lexically binds the <em>this</em> value
-          </p>
-          <pre><code data-trim data-noescape>
-(param1, param2, …, paramN) => { statements }
-(param1, param2, …, paramN) => expression
-// equivalent to:  => { return expression; }
-
-// Parentheses are optional when there's only one parameter:
-(singleParam) => { statements }
-singleParam => { statements }
-
-// A function with no parameters requires parentheses:
-() => { statements }
-          </code></pre>
-        </section>
-        <section>
-          <h4> => Arrow functions contd...</h4>
-          <pre><code data-trim data-noescape>
-var numbers = [1, 4, 9];
-var doubled = numbers.map(x => 2 * x);
-// doubled is now [2, 8, 18], numbers is still [1, 4, 9]
-          </code></pre>
-
-          <pre><code data-trim data-noescape>
-var kvArray = [{key:1, value:10}, {key:2, value:20}, {key:3, value: 30}];
-
-var reformattedArray = kvArray.map((obj) => {
-  var rObj = {};
-  rObj[obj.key] = obj.value;
-  return rObj;
-});
-
-// reformattedArray is now [{1: 10}, {2: 20}, {3: 30}],
-// kvArray is still [{key: 1, value: 10}, {key: 2, value: 20}, {key: 3, value: 30}]
-          </code></pre>
-        </section>
-        <section>
-          <h5>Prototype based programing using JS</h5>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-           JavaScript is an object-based language based on prototypes, rather than being class-based.
-          </p>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-      JavaScript only has objects. A prototype-based language has the notion of a prototypical object, an object used as a template from which to get the initial properties for a new object. Any object can specify its own properties, either when you create it or at run time. In addition, any object can be associated as the prototype for another object, allowing the second object to share the first object's properties.
-          </p>
-        </section>
-        <section>
-          <h4>Prototype chain</h4>
-          <p align="left" style="padding-top: 20px; font-size: 25px">
-            JavaScript objects are dynamic bags of properties (referred to as own properties). JavaScript objects have a link to a <em>prototype object</em>. When trying to access a property of an object, the property will not only be sought on the object but on the prototype of the object, the prototype of the prototype, and so on until either a property with a matching name is found or the end of the prototype chain is reached.
-          </p>
-          <pre><code data-trim data-noescape>
-var o = {a: 1};
-
-// The newly created object o has Object.prototype as its
-// [[Prototype]]. o has no own property named 'hasOwnProperty'
-// hasOwnProperty is an own property of Object.prototype.
-// So o inherits hasOwnProperty from Object.prototype
-// Object.prototype has null as its prototype.
-// o ---> Object.prototype ---> null
-
-var a = ["yo", "whadup", "?"];
-
-// Arrays inherit from Array.prototype
-// (which has methods like indexOf, forEach, etc.)
-// The prototype chain looks like:
-// a ---> Array.prototype ---> Object.prototype ---> null
-
-function f(){
-  return 2;
-}
-
-// Functions inherit from Function.prototype
-// (which has methods like call, bind, etc.)
-// f ---> Function.prototype ---> Object.prototype ---> null
-          </code></pre>
-        </section>
-        <section>
-          <h5>Creating Object Hierarchy in JS</h5>
-          <pre><code data-trim data-noescape>
-function Employee() {
-  this.name = "";
-  this.dept = "general";
-}
-
-function Manager() {
-  Employee.call(this);
-  this.reports = [];
-}
-
-Manager.prototype = Object.create(Employee.prototype);
-
-function WorkerBee() {
-  Employee.call(this);
-  this.projects = [];
-}
-
-WorkerBee.prototype = Object.create(Employee.prototype);
-
-function SalesPerson() {
-  WorkerBee.call(this);
-  this.dept = "sales";
-  this.quota = 100;
-}
-
-SalesPerson.prototype = Object.create(WorkerBee.prototype);
-
-function Engineer() {
-  WorkerBee.call(this);
-  this.dept = "engineering";
-  this.machine = "";
-}
-
-Engineer.prototype = Object.create(WorkerBee.prototype);
-          </code></pre>
-        </section>
-        <section>
-          <h4>Array & Object destructuring</h4>
-          <pre><code data-trim data-noescape>
-var foo = ["one", "two", "three"];
-var [one, two, three] = foo;
-console.log(one); // "one"
-console.log(two); // "two"
-console.log(three); // "three"
-          </code></pre>
-          <pre><code data-trim data-noescape>
-var a, b;
-
-[a, b] = [1, 2];
-console.log(a); // 1
-console.log(b); // 2
-          </code></pre>
-          <pre><code data-trim data-noescape>
-var o = { p: 42, q: true };
-var { p, q } = o;
-
-console.log(p); // 42
-console.log(q); // true
-          </code></pre>
-          <pre><code data-trim data-noescape>
-var o = {p: 42, q: true};
-var {p: foo, q: bar} = o;
-
-console.log(foo); // 42
-console.log(bar); // true
-          </code></pre>
-        </section>
-        <section>
           <h4>Asynchrony (computer programming)</h4>
           <p align="left" style="padding-top: 20px; font-size: 25px">
             Asynchrony, in computer programming, refers to the occurrence of events independently of the main program flow and ways to deal with such events. These may be "outside" events such as the arrival of signals, or actions instigated by a program that take place concurrently with program execution, without the program blocking to wait for results.
@@ -534,7 +530,7 @@ $(".fetchRecord").click(function() {
   alert("Requested to fetch record.");
 });
           </code></pre>
-          </section>
+        </section>
           <section>
             <h4>Promise</h4>
             <p align="left" style="padding-top: 20px; font-size: 25px">
@@ -630,43 +626,955 @@ p1.then(function(value) {
 
           </section>
           <section>
-            <h4>Faking Multiple inheritance (almost)</h4>
-            <pre><code data-trim data-noescape>
-function Employee() {
-  this.name = "Mr. N. C. B";
-  this.dept = "general";
+            <h4>Classes</h4>
+            <p align="left" style="padding-top: 20px; font-size: 25px;">
+              JavaScript classes introduced in ECMAScript 2015 are syntactical sugar over JavaScript's existing prototype-based inheritance. Classes are in fact "special functions", and just as you can define function expressions and function declarations, the class syntax has two components: <em>class expressions and class declarations.</em>
+            </p>
+            <pre><code>
+//class declaration
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
 }
-
-function Robot() {
-  this.company = "Kreeti Technologies";
-}
-
-function Manager() {
-  Employee.call(this);
-  Robot.call(this);
-  this.reports = [];
-}
-
-Manager.prototype = Object.create(Employee.prototype);
-Object.assign(Manager.prototype, Robot.prototype);
-    </code></pre>
+            </code></pre>
+            <p align="left" style="padding-top: 20px; font-size: 25px;">
+              <strong><em>An important difference between function declarations and class declarations is that function declarations are hoisted and class declarations are not.</em></strong>
+            </p>
           </section>
+          <section>
+            <h4>Classes(Continuing...)</h4>
+            <p align="left" style="padding-top: 20px; font-size: 25px;">
+              A <em>class expression</em> is another way to define a class. Class expressions can be named or unnamed. The name given to a named class expression is local to the class's body.
+            </p>
+            <pre><code style="max-height:600px!important">
+// unnamed
+var Rectangle = class {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+};
+
+// named
+var Rectangle = class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+};
+            </code></pre>
+          </section>
+          <section>
+            <h4>Classes(Continuing...)</h4>
+            <p align="left" style="padding-top: 20px; font-size: 25px;">
+              The <em>constructor</em> method is a special method for creating and initializing an object created with a class. There can only be one special method with the name "constructor" in a class. A SyntaxError will be thrown if the class contains more than one occurrence of a constructor method. A constructor can use the super keyword to call the constructor of a parent class.
+            </p>
+            <pre><code style="max-height:600px!important">
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+
+  get area() {
+    return this.calcArea();
+  }
+  set width(width) { //can't pass multiple params
+    this.width = width;
+  }
+  calcArea() {
+    return this.height * this.width;
+  }
+}
+const square = new Rectangle(10, 10);
+console.log(square.area);
+            </code></pre>
+          </section>
+          <section>
+            <h4>Classes(Continuing...)</h4>
+            <ul style="font-size: 25px;">
+              <li>
+                Static methods
+              </li>
+              <li>
+                Boxing with prototype and static methods.
+                <pre><code style="max-height: 600px!important;">
+//no autoboxing if called a method without object.
+class Animal {
+  speak() {
+    return this;
+  }
+  static eat() {
+    return this;
+  }
+}
+let obj = new Animal();
+let speak = obj.speak;
+speak(); // undefined
+let eat = obj.eat;
+eat(); // undefined
+
+//using traditional function, autoboxing happened
+function Animal() { }
+Animal.prototype.speak = function() {
+  return this;
+}
+Animal.eat = function() {
+  return this;
+}
+let obj = new Animal();
+let speak = obj.speak;
+speak(); // global object
+let eat = obj.eat;
+eat(); // global object
+                </code></pre>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4>Classes(Continuing...)</h4>
+            <ul style="font-size: 22px;">
+              <li>
+                <em>Sub classing with extends</em> : If there is a constructor present in sub-class, it needs to first call super() before using "this". Note that classes cannot extend regular (non-constructible) objects. If you want to inherit from a regular object, you can instead use <em>Object.setPrototypeOf()</em>.
+              </li>
+              <li>
+                <em>Super class calls with super</em> : The <em>super</em> keyword is used to call functions on an object's parent.
+              </li>
+              <li>
+                <em>Mix-ins</em> : An ECMAScript class can only have a single superclass, so multiple inheritance is not possible
+                <pre><code>
+var calculatorMixin = Base => class extends Base {
+  calc() { }
+};
+var randomizerMixin = Base => class extends Base {
+  randomize() { }
+};
+
+class Foo { }
+class Bar extends calculatorMixin(randomizerMixin(Foo)) { }
+                </code></pre>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4>Generators</h4>
+            <p align="left" style="padding-top: 20px; font-size: 25px;">
+              ES6 <em>generator</em> functions are "cooperative" in their concurrency behavior. Inside the generator function body, you use the new <strong><em>yield</em></strong> keyword to pause the function from inside itself. Nothing can pause a generator from the outside; it pauses itself when it comes across a yield. However, once a generator has yield-paused itself, it cannot resume on its own. An external control must be used to restart the generator.
+            </p>
+            <pre><code>
+function *foo() {
+    var x = 1 + (yield "foo");
+    console.log(x);
+}
+var it = foo();
+console.log(it.next()); // { value:1, done:false }
+console.log(it.next()); // { value:undefined, done:true }
+
+function *foo(x) {
+    var y = 2 * (yield (x + 1));
+    var z = yield (y / 3);
+    return (x + y + z);
+}
+var it = foo( 5 );
+console.log( it.next() );       // { value:6, done:false }
+console.log( it.next( 12 ) );   // { value:8, done:false }
+console.log( it.next( 13 ) );   // { value:42, done:true }
+            </code></pre>
+            <p align="left" style="padding-top: 20px; font-size: 25px;">
+              <strong>for..of</strong> : ES6 also embraces this iterator pattern at the syntactic level, by providing direct support for running iterators to completion: the for..of loop.
+            </p>
+          </section>
+        <section>
+          <h4>What is the DOM? (Document Object Model)</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            The W3C Document Object Model (DOM) is a platform and language-neutral interface that allows programs and scripts to dynamically access and update the content, structure, and style of a document.
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            The W3C DOM standard is separated into 3 different parts:
+          </p>
+          <ul style="font-size: 22px;">
+            <li>
+              Core DOM - standard model for all document types
+            </li>
+            <li>
+              XML DOM - standard model for XML documents
+            </li>
+            <li>
+              HTML DOM - standard model for HTML documents
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>The HTML DOM</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            The HTML DOM is a standard object model and programming interface for HTML
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            It defines:
+          </p>
+          <ul style="font-size: 22px;">
+            <li>
+              The HTML elements as objects
+            </li>
+            <li>
+              The properties of all HTML elements
+            </li>
+            <li>
+              The methods to access all HTML elements
+            </li>
+            <li>
+              The events for all HTML elements
+            </li>
+          </ul>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            In other words: The HTML DOM is a standard for how to get, change, add, or delete HTML elements.
+          </p>
+        </section>
+        <section>
+          <h4>DOM and JavaScript. How Do I Access the DOM?</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            A <strong>property</strong> is a value that you can get or set (like changing the content of an HTML element).
+            A <strong>method</strong> is an action you can do (like add or deleting an HTML element).
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            With the object model, JavaScript gets all the power it needs to create dynamic HTML:
+          </p>
+          <ul style="font-size: 22px;">
+            <li>
+              JavaScript can change all the HTML elements in the page
+            </li>
+            <li>
+              JavaScript can change all the HTML attributes in the page
+            </li>
+            <li>
+              JavaScript can change all the CSS styles in the page
+            </li>
+            <li>
+              JavaScript can remove existing HTML elements and attributes
+            </li>
+            <li>
+              JavaScript can add new HTML elements and attributes
+            </li>
+            <li>
+              JavaScript can react to all existing HTML events in the page
+            </li>
+            <li>
+              JavaScript can create new HTML events in the page
+            </li>
+          </ul>
+          <pre><code data-trim data-noescape>
+              document.getElementById("demo").innerHTML = "Hello World!";
+          </code></pre>
+        </section>
+        <section>
+          <h4>Events</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            The HTML DOM allows you to execute code when an event occurs.
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            Events are generated by the browser when "things happen" to HTML elements. Like
+          </p>
+          <ul style="font-size: 22px;">
+            <li>
+              When a user clicks the mouse
+            </li>
+            <li>
+              When a web page has loaded
+            </li>
+            <li>
+              When an image has been loaded
+            </li>
+            <li>
+              When the mouse moves over an element
+            </li>
+            <li>
+              When an input field is changed
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Events Type</h4>
+          <ul style="font-size: 22px;">
+            <li>
+              <strong>Mouse Events:</strong> like onclick, oncontextmenu, obdblclick, onmousedown, onmouseenter, onmouseleave, onmousemove, onmouseover, onmouseout, onmouseup.
+            </li>
+            <li>
+              <strong>Keyboard Events:</strong> like onkeydown, onkeyup, onkeypress
+            </li>
+            <li>
+              <strong>Frame/Object Events</strong> like onabort, onbeforeunload, onerror, onhashchange, onload, onpageshow, onpagehide, onresize, onscroll, onunload
+            </li>
+            <li>
+              <strong>Form Events:</strong> like onblur, onchange, onfocus, onfocusin, onfocusout, oninput, oninvalid, onreset, onsearch, onselect, onsubmit
+            </li>
+            <li>
+              <strong>Drag Events:</strong> like ondrag, ondragend, ondragenter, ondragleave, ondragover, ondragstart, ondrop
+            </li>
+            <li>
+              <strong>Clipboard Events:</strong> like oncopy, oncut, onpaste
+            </li>
+            <li>
+              <strong>Print Events:</strong> like onafterprint, onbeforeprint
+            </li>
+            <li>
+              <strong>Media Events:</strong> like onabort, oncanplay, onended, onerror, onplay, onpause, etc
+            </li>
+            <li>
+              <strong>Animation Events:</strong> like animationend, animationiteration, animationstart
+            </li>
+            <li>
+              <strong>Transiation Events:</strong> like transiationend
+            </li>
+            <li>
+              <strong>Server-Sent Events:</strong> like onerror, onmessage, onopen
+            </li>
+            <li>
+              <strong>Misc Events:</strong> like onwheel, ontoggle
+            </li>
+            <li>
+              <strong>Touch Events:</strong> like ontouchcancel,ontouchmove, ontouchend, ontouchstart
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h4>Event Bubbling or Event Capturing?</h4>
+          <p align="left" style="padding-top: 5px; font-size: 25px;">
+            There are two ways of event propagation in the HTML DOM, bubbling and capturing.
+          </p>
+          <p align="left" style="padding-top: 5px; font-size: 25px;">
+            Event propagation is a way of defining the element order when an event occurs. If you have a <strong>&lt;p&gt;</strong> element inside a <strong>&lt;div&gt;</strong> element, and the user clicks on the element, which element's "click" event should be handled first?
+          </p>
+          <p align="left" style="padding-top: 5px; font-size: 25px;">
+            In bubbling the inner most element's event is handled first and then the outer: the <strong>&lt;p&gt;</strong> element's click event is handled first, then the <strong>&lt;div&gt;</strong> element's click event.
+          </p>
+          <p align="left" style="padding-top: 5px; font-size: 25px;">
+            In capturing the outer most element's event is handled first and then the inner: the <strong>&lt;div&gt;</strong> element's click event will be handled first, then the <strong>&lt;p&gt;</strong> element's click event.
+          </p>
+          <p align="left" style="padding-top: 5px; font-size: 25px;">
+            With the addEventListener() method you can specify the propagation type by using the "useCapture" parameter:
+          </p>
+<pre><code>
+    element.addEventListener(event, function, useCapture);
+</code></pre>
+          <p align="left" style="padding-top: 5px; font-size: 25px;">
+            The default value is false, which will use the bubbling propagation, when the value is set to true, the event uses the capturing propagation.
+          </p>
+        </section>
+        <section>
+          <h4>JavaScript HTML DOM EventListener</h4>
+          <ul style="font-size: 22px;">
+            <li>
+              The addEventListener() method. The addEventListener() method allows you to add many events to the same element(/same type), without overwriting existing events. If you add same event type multiple time to a element, then event handle will execute in LIFO order.
+              <pre><code>
+                  element.addEventListener(event, function, useCapture);
+              </code></pre>
+            </li>
+            <li>
+              The removeEventListener() method. The removeEventListener() method removes event handlers that have been attached with the addEventListener() method
+              <pre><code>
+                  element.removeEventListener("mousemove", myFunction);
+              </code></pre>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Event Loop</h4>
+          <p align="left" style="padding-top: 20px; font-size: 23px;">
+            The event loop got its name because of how it's usually implemented, which usually resembles:
+            <pre><code>
+                while (queue.waitForMessage()) {
+                  queue.processNextMessage();
+                }
+            </code></pre>
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 23px;">
+            <strong>queue.waitForMessage</strong> waits synchronously for a message to arrive if there is none currently.
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 23px;">
+            <strong>Run-to-completion: </strong>Each message is processed completely before any other message is processed. This offers some nice properties when reasoning about your program, including the fact that whenever a function runs, it cannot be pre-empted and will run entirely before any other code runs.
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 23px;">
+            A downside of this model is that if a message takes too long to complete, the web application is unable to process user interactions like click or scroll. The browser mitigates this with the "a script is taking too long to run" dialog. A good practice to follow is to make message processing short and if possible cut down one message into several messages.
+          </p>
+        </section>
+        <section>
+          <h4>Continue...</h4>
+          <p align="left" style="padding-top: 20px; font-size: 23px;">
+            <strong>Adding messages: </strong>In web browsers, messages are added any time an event occurs and there is an event listener attached to it. If there is no listener, the event is lost. So a click on an element with a click event handler will add a message--likewise with any other event.
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 23px;">
+            <strong>Zero delays: </strong>Zero delay doesn't actually mean the call back will fire-off after zero milliseconds
+          <pre><code>
+(function() {
+  console.log('this is the start');
+
+  setTimeout(function cb() {
+    console.log('this is a msg from call back');
+  });
+
+  console.log('this is just a message');
+
+  setTimeout(function cb1() {
+    console.log('this is a msg from call back1');
+  }, 0);
+
+  console.log('this is the end');
+})();
+          </code></pre>
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            <strong>Never blocking: </strong>
+            A very interesting property of the event loop model is that JavaScript, unlike a lot of other languages, never blocks. Handling I/O is typically performed via events and callbacks, so when the application is waiting for an IndexedDB query to return or an XHR request to return, it can still process other things like user input.
+          </p>
+        </section>
+        <section>
+          <h4>Handling Asynchronous requests in Javascript, Ajax</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            XMLHttpRequest supports both synchronous and asynchronous communications. In general, however, asynchronous requests should be preferred to synchronous requests for performance reasons.
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            <strong>Asynchronous request: </strong>If you use XMLHttpRequest from an extension, you should use it asynchronously.  In this case, you receive a callback when the data has been received, which lets the browser continue to work as normal while your request is being handled.
+          </p>
+        </section>
+          <section>
+            <h4>JQUERY</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            jQuery is just a JavaScript library. All the power of jQuery is accessed via JavaScript
+          </p>
+          <pre><code>
+window.onload = function() {
+  alert( "welcome" );
+};
+
+$( document ).ready(function() {
+  $( "a" ).click(function( event ) {
+    alert( "Hello World" );
+  });
+});
+          </code></pre>
+        </section>
+        <section>
+          <h4>$ vs $()</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            jQuery methods are called on jQuery objects as shown above; these methods are said to be part of the $.fn namespace, or the "jQuery prototype," and are best thought of as jQuery object methods. This automatically receive and return the selection as <strong><em>this</em></strong>
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            However, there are several methods that do not act on a selection; these methods are said to be part of the jQuery namespace, and are best thought of as core jQuery methods. These are utility-type methods, and do not work with selections; they are not automatically passed any arguments, and their return value will vary.
+          </p>
+        </section>
+        <section>
+          <h4>$(document).ready()</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            A page can't be manipulated safely until the document is "ready". Code included inside <em>$(document).ready(function() {...})</em> will only run once the page Document Object Model (DOM) is ready for JavaScript code to execute. Code included inside <em>$(window).on("load", function() { ... })</em> will run once the entire page (images or iframes), not just the DOM, is ready.
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            We can use the shorthand <em>$()</em> for <em>$( document ).ready().</em>
+          </p>
+        </section>
+        <section>
+          <h4>Avoiding Conflicts with Other Libraries</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            Below are some ways to avoid conflicts :
+          </p>
+          <ul style="font-size: 22px;">
+            <li>
+              Create a New Alias
+              <pre><code>
+// Give $ back to prototype.js; create new alias to jQuery.
+var $jq = jQuery.noConflict();
+              </code></pre>
+            <li>
+              Use an Immediately Invoked Function Expression.
+              <pre><code>
+jQuery.noConflict();
+(function( $ ) {
+    // Your jQuery code here, using the $
+})( jQuery );
+              </code></pre>
+            </li>
+            <li>
+              Use the Argument That's Passed to the jQuery( document ).ready() Function. If you include jQuery before other libraries, you may use <em>jQuery</em> when you do some work with jQuery, but the <em>$</em> will have the meaning defined in the other library. There is no need to relinquish the <em>$</em> alias by calling <em>jQuery.noConflict()</em>
+              <pre><code>
+jQuery(document).ready(function( $ ) {
+    // Your jQuery code here, using $ to refer to jQuery.
+});
+              </code></pre>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Attributes</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            An element's attributes can contain useful information for your application, so it's important to be able to get and set them. The <strong><em>.attr()</em></strong> method acts as both a getter and a setter.
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            <em>.attr()</em> as a setter:
+            <pre><code>
+$("a").attr("href", "allMyHrefsAreTheSameNow.html");
+$("a").attr({
+  title: "all titles are the same too!",
+  href: "somethingNew.html"
+});
+            </code></pre>
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            <em>.attr()</em> as a getter:
+            <pre><code>
+$("a").attr("href");
+            </code></pre>
+          </p>
+        </section>
+        <section>
+          <h4>Selecting Elements</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+              <pre><code style="max-height: 600px!important;">
+// Selecting elements by ID
+$("#myId"); // Note IDs must be unique per page.
+
+// Selecting elements by Class Name
+$( ".myClass" );
+
+// Selecting elements by Attribute
+$( "input[name='first_name']" );
+
+// Selecting Elements by Compound CSS Selector
+$( "#contents ul.people li" );
+
+// Selecting Elements with a Comma-separated List of Selectors
+$( "div.myClass, ul.people" );
+
+// Pseudo-Selectors
+$( "a.external:first" );
+$( "tr:odd" );
+$( "#myForm :input" ); // Select all input-like elements in a form (more on this below).
+$( "div:visible" );
+$( "div:gt(2)" ); // All except the first three divs.
+$( "div:animated" ); // All currently animated divs.
+              </code></pre>
+          </p>
+        </section>
+        <section>
+          <h4>Working with Selections</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            Getters & Setters
+            <pre><code>
+// The .html() method sets all the h1 elements' html to be "hello world":
+$( "h1" ).html( "hello world" );
+// The .html() method returns the html of the first h1 element:
+$( "h1" ).html();
+// > "hello world"
+// Attempting to call a jQuery method after calling a getter.
+// This will NOT work:
+$( "h1" ).html().addClass( "test" );
+            </code></pre>
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            Chaining
+            <pre><code>
+$( "#content" ).find( "h3" ).eq( 2 ).html( "new text for the third h3!" );
+              </code></pre>
+          </p>
+        </section>
+        <section>
+          <h4>Manipulating Elements</h4>
+          <ul style="font-size: 22px;">
+            <li>
+              Getting and Setting Information About Elements
+            </li>
+            <li>
+              Moving, Copying, and Removing Elements
+              <ul style="font-size: 22px;">
+                <li>
+                  Place the selected element(s) relative to another element. e.g <em>.insertAfter(), .insertBefore(), .appendTo(), .prependTo()</em>
+                </li>
+                <li>
+                  Place an element relative to the selected element(s).  e.g <em>.after(), .before(), .append(), .prepend()</em>
+                </li>
+              </ul>
+            </li>
+            <li>
+              Cloning Elements. If you need to copy related data and events, be sure to pass <em>true</em> as an argument to <em>.clone()</em>.
+              <pre><code>
+$( "#myList li:first" ).clone().appendTo( "#myList" );
+              </code></pre>
+            </li>
+            <li>
+              Removing Elements. e.g <em>.remove(), .detach() and .empty() </em>
+            </li>
+            <li>
+              Creating New Elements
+              <pre><code>
+var myNewElement = $( "<p>New element</p>" );
+myNewElement.appendTo( "#content" );
+myNewElement.insertAfter( "ul:last" );
+              </code></pre>
+            </li>
+            <li>
+              Manipulating Attributes
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>The jQuery Object</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            When creating new elements (or selecting existing ones), jQuery returns the elements in a collection. Many developers new to jQuery assume that this collection is an array.
+          </p>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            Some benefits of the jQuery Object include:
+            <ul style="font-size: 22px;">
+              <li>
+                <em>Compatibility:</em> The implementation of element methods varies across browser vendors and versions. jQuery will take care of all this.
+                <pre><code>
+// using pure javascript
+var target = document.getElementById("target");
+target.innerHTML = "<td>Hello <b>World</b>!</td>";
+
+//help of jquery
+$(target).html("<td>Hello <b>World</b>!</td>");
+                </code></pre>
+              </li>
+              <li>
+                <em>Convenience: </em>For instance, inserting an element stored in newElement after the target element requires a rather verbose DOM method:
+                <pre><code>
+// Inserting a new element after another with the native DOM API.
+var target = document.getElementById( "target" );
+var newElement = document.createElement( "div" );
+target.parentNode.insertBefore( newElement, target.nextSibling );
+
+//By wrapping the target element in a jQuery object, the same task becomes much simpler
+$(target).after(newElement);
+                </code></pre>
+              </li>
+            </ul>
+          </p>
+        </section>
+        <section>
+          <h4>jQuery(continuing....)</h4>
+          <ul style="font-size: 22px;">
+            <li>
+              <em>Getting Elements Into the jQuery Object</em>
+              <pre><code>
+// Selecting only the first &lt;h1&gt; element on the page (in a jQuery object)
+var headings = $("h1");
+var firstHeading = headings.eq(0);
+
+// Selecting only the first &lt;h1&gt; element on the page.
+var firstHeadingElem = $("h1").get(0);
+var firstHeadingElem = $("h1")[0];
+              </code></pre>
+            </li>
+            <li>
+              <em>Not All jQuery Objects are Created(===)</em>
+              <p align="left" style="font-size: 22px;">
+                jQuery object is unique. This is true <em>even if the object was created with the same selector or contain references to the exact same DOM elements</em>. But if we can test whether two objects refer to same DOM element or not by comparing their DOM elements using <em>.get(0)</em> method.
+              </p>
+            </li>
+            <li>
+              <em>jQuery Objects Are Not "Live"</em> : it does not automatically update as the document changes
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Traversing</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            Once you've made an initial selection with jQuery, you can traverse deeper into what was just selected. Traversing can be broken down into three basic parts:
+            <ul style="font-size: 22px;">
+              <li>
+                <strong>Parents: </strong>The methods for finding the parents from a selection include <em>.parent(), .parents(), .parentsUntil(), and .closest()</em>.
+              </li>
+              <li>
+                <strong>Children: </strong>The methods for finding the children from a selection include <em>.children() and .find()</em>.
+              </li>
+              <li>
+                <strong>Siblings: </strong>The rest of the traversal methods within jQuery all deal with finding sibling selections. e.g <em>.prev(), .next(), .siblings(), .nextAll(), .nextUntil(), .prevAll() and .prevUntil()</em>.
+              </li>
+            </ul>
+          </p>
+        </section>
+        <section>
+          <h4>CSS, Styling, & Dimensions</h4>
+            <pre><code style="font-size: 15px; max-height: 600px!important;">
+// Getting CSS properties.
+$( "h1" ).css( "fontSize" );
+$( "h1" ).css( "font-size" );
+
+// Setting CSS properties.
+$( "h1" ).css( "fontSize", "100px" ); // Setting an individual property.
+// Setting multiple properties.
+$( "h1" ).css({ fontSize: "100px", color: "red" });
+
+//working with classes
+var h1 = $( "h1" );
+h1.addClass( "big" );
+h1.removeClass( "big" );
+h1.toggleClass( "big" );
+if ( h1.hasClass( "big" ) ) {...}
+
+// Basic dimensions methods.
+$( "h1" ).width( "50px" );
+$( "h1" ).width();
+$( "h1" ).height( "50px" );
+$( "h1" ).height();
+$( "h1" ).position();
+            </code></pre>
+        </section>
+        <section>
+          <h4>Data Methods</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            There's often data about an element you want to store with the element. In plain JavaScript, you might do this by adding a property to the DOM element, but you'd have to deal with memory leaks in some browsers. jQuery offers a straightforward way to store data related to an element, and it manages the memory issues for you. Any kind of data can be stored on an element.
+            <pre><code style="font-size: 15px; max-height: 600px!important;">
+$( "#myDiv" ).data( "keyName", { foo: "bar" } );
+$( "#myDiv" ).data( "keyName" );
+
+// Storing a relationship between elements using .data()
+$( "#myList li" ).each(function() {
+  var li = $( this );
+  var div = li.find( "div.content" );
+  li.data( "contentDiv", div );
+});
+
+// Later, we don't have to find the div again. we can just read it from the list item's data
+var firstLi = $( "#myList li:first" );
+firstLi.data( "contentDiv" ).html( "new content" );
+            </code></pre>
+          </p>
+        </section>
+        <section>
+          <h4>Utility Methods</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            jQuery offers several utility methods in the $ namespace. These methods are helpful for accomplishing routine programming tasks.
+          </p>
+          <pre><code style="font-size: 15px; max-height: 600px!important;">
+$.trim( "    lots of extra whitespace    " ); // Removes leading and trailing whitespace
+$.each([ "foo", "bar", "baz" ], function( idx, val ) { console.log( "element " + idx + " is " + val ); }); //Iterates over arrays
+$.each({ foo: "bar", baz: "bim" }, function( k, v ) { console.log( k + " : " + v ); }); //Iterates over objects
+var myArray = [ 1, 2, 3, 5 ];
+if ( $.inArray( 4, myArray ) !== -1 ) { console.log( "found it!" ); } //return searched element index
+var newObject = $.extend( firstObject, secondObject ); // changes the properties of first element and return's first element value
+var newObject = $.extend( {}, firstObject, secondObject ); // if you don't want to change the any object properties
+var myFunction = function() { console.log( this ); };
+var myObject = { foo: "bar" };
+
+myFunction(); // window
+var myProxyFunction = $.proxy( myFunction, myObject );
+myProxyFunction(); // myObject
+//testing type
+$.isArray([]); // true
+$.isFunction(function() {}); // true
+$.isNumeric(3.14);
+//check inner class used to create a value
+$.type( "test" ); // "string"
+          </code></pre>
+        </section>
+        <section>
+          <h4>Iterating over jQuery and non-jQuery Objects</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            <ul style="font-size: 22px;">
+              <li>
+                <em>$.each()</em> is used for non jQuery objects and  <em>.each()</em> is used for jQuery objects. The use of second argument is to retaincurrent element even if the execution context may change.
+                <pre><code>
+$.each( arr, function( index, value ){ sum += value; });
+$( "li" ).addClass( "newClass" ); // .each() isn't necessary
+$( "input" ).val( $( this ).val() + "%" ); // does not change the execution context
+                </code></pre>
+              </li>
+              <li>
+                <em>$.map()</em> and  <em>.map()</em>
+                <pre><code>
+// Returns [ "a", "b", "c" ]
+$( "li" ).map( function( index, element ) {
+    return element.id;
+}).get();
+
+$.map( arr, function( value, index ) {
+    return value.id;
+});
+                </code></pre>
+              </li>
+            </ul>
+          </p>
+        </section>
+
+        <section>
+          <h4>jQuery Events</h4>
+          <p align="left" style="padding-top: 20px; font-size: 22px;">
+            jQuery offers convenience methods for most native browser events. These methods — including <em>.click(), .focus(), .blur(), .change(), etc.</em> — are shorthand for jQuery's <em>.on()</em> method. The on method is useful for binding the same handler function to multiple events.
+            <pre><code style="font-size: 18px;">
+$( "p" ).click(function() { ... });
+$( "p" ).on( "click", function() { ... });
+            </code></pre>
+          </p>
+          <ul style="font-size: 22px;">
+            <li>
+              <strong><em>It is important to note that .on() can only create event listeners on elements that exist at the time you set up the listeners.</em></strong>
+            </li>
+            <li>
+              <strong><em>Event Delegation: </em></strong>
+              <pre><code>
+$( "#list" ).on( "click", "a", function( event ) { ... });
+              </code></pre>
+            </li>
+            <li>
+              Every event handling function receives an event object, which contains many properties and methods. The event object is most commonly used to prevent the default action of the event via the <em>.preventDefault()</em> method.
+            </li>
+            <li>
+              Setting Up Multiple Event Responses
+            </li>
+            <li>
+              Namespacing Events
+            </li>
+            <li>
+              Tearing Down Event Listeners
+            </li>
+            <li>
+              Setting Up Events to Run Only Once
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Event Helpers</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+jQuery offers a few event-related helper functions that save you a few keystrokes. Here is an example of one, the <em>.hover()</em> function.
+The <em>.hover()</em> method lets you pass one or two functions to be run when the mouseenter and mouseleave events occur on an element. If you pass one function, it will be run for both events; if you pass two functions, the first will run for mouseenter, and the second will run for mouseleave.
+          </p>
+          <pre><code>
+$( "#menu li" ).hover(function() {
+    $( this ).toggleClass( "hover" );
+});
+          </code></pre>
+        </section>
+        <section>
+          <h4>Effects</h4>
+          <p align="left" style="padding-top: 0px; font-size: 20px;">
+            <ul style="font-size: 20px;">
+              <li>
+                Showing and Hiding Content
+                <pre><code>
+$( "p" ).hide(); //.show()
+                </code></pre>
+              </li>
+              <li>
+                Fade and Slide Animations
+                <pre><code>
+$( "p" ).slideUp( 800 ); //.slideDown( 600 ), .fadeOut( 1500 ), .fadeIn( 750 );
+                </code></pre>
+              </li>
+              <li>
+                Changing Display Based on Current Visibility State
+                <pre><code>
+$( "p" ).toggle(); // .toggle('slow'), .toggle(1500), .slideToggle( 1000 ), .fadeToggle( 1000 );
+                </code></pre>
+              </li>
+              <li>
+                Doing Something After an Animation Completes
+                <pre><code>
+$( "p.hidden" ).fadeIn( 750 ).addClass( "lookAtMe" ); // wrong
+$( "p.hidden" ).fadeIn( 750, function() {
+    $( this ).addClass( "lookAtMe" );
+});
+                </code></pre>
+              </li>
+              <li>
+                Managing Animation Effects
+                <pre><code>
+$( "<button type='button'></button>" ).text( "Stop All Animations" ).on( "click", function() {
+  $( "body *" ).filter( ":animated" ).stop();
+}).appendTo( document.body );
+$( "h1" ).hide( 500 ).delay( 1500 ).show( 300 );
+                </code></pre>
+              </li>
+            </ul>
+          </p>
+        </section>
+        <section>
+          <h4>Custom Effects with <em>.animate()</em></h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            jQuery makes it possible to animate arbitrary CSS properties via the <em>.animate()</em> method. The <em>.animate()</em> method lets you animate to a set value, or to a value relative to the current value.
+          </p>
+        </section>
+        <section>
+          <h4>Ajax</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            jQuery provides Ajax support that abstracts away painful browser differences. It offers both a full-featured <em>$.ajax()</em> method, and simple convenience methods such as <em>$.get(), $.getScript(), $.getJSON(), $.post(), and $().load()</em>.
+          </p>
+          <ul style="font-size: 25px;">
+            <li>
+              <strong><em>GET vs. POST</em></strong> :The <em>GET</em> method should be used for non-destructive operations. The <em>POST</em> method should be used for destructive operations .
+            </li>
+            <li>
+              <strong><em>Data Types</strong></em>: jQuery generally requires some instruction as to the type of data you expect to get back from an Ajax request; in some cases the data type is specified by the method name. Options are <em>text, html, script, json, jsonp, xml</em>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>jQuery’s Ajax-Related Methods</h4>
+          <p align="left" style="padding-top: 20px; font-size: 25px;">
+            <ul style="font-size: 25px;">
+              <li>
+                <em>$.ajax()</em>: is at the heart of all of convenience methods.
+                <pre><code>
+$.ajax({
+    url: "post.php",
+    data: {
+        id: 123
+    },
+    type: "GET",
+    dataType : "json",
+})
+.done(function( json ) { ... })
+.fail(function( xhr, status, errorThrown ) { ... })
+.always(function( xhr, status ) { ...  });
+                </code></pre>
+                <p align="left" style="font-size: 25px">
+                  Other options :  <em>async, cache, timeout, (PUT, DELETE) don't support by all browser etc.</em>
+                </p>
+              </li>
+            </ul>
+          </p>
+        </section>
+        <section>
+          <h4>Convenience Methods</h4>
+          <p align="left" style="font-size: 25px">
+            If you don't need the extensive configurability of $.ajax(), and you don't care about handling errors, then , these functions provided by jQuery can be useful.
+            <pre><code style="max-height:600px!important">
+$.get( "/users", {
+    userId: 1234
+}, function( resp ) {
+    console.log( resp ); // server response
+});
+
+// Add a script to the page, then run a function defined in it
+$.getScript( "/static/js/myScript.js", function() {
+    functionFromMyScript();
+});
+
+// Get JSON-formatted data from the server
+$.getJSON( "/details", function( resp ) {
+    $.each( resp, function( key, value ) {
+        console.log( key + " : " + value );
+    });
+});
+//The .load() method is unique among jQuery’s Ajax methods in that it is called on a selection
+$( "#newContent" ).load( "/foo.html" );
+            </code></pre>
+          </p>
+        </section>
           <section>
       <h2>Questions?</h2>
           </section>
           <section>
             <h4>References</h4>
             <ul align="left" style="padding-top: 20px; font-size: 25px">
-              <li>https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29</li>
-              <li>https://en.wikipedia.org/wiki/Pure_function</li>
-              <li>http://eloquentjavascript.net/05_higher_order.html</li>
               <li>https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions</li>
-              <li>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this</li>
-              <li>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this</li>
-              <li>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Details_of_the_Object_Model</li>
-              <li>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain</li>
-              <li>https://en.wikipedia.org/wiki/Asynchrony_%28computer_programming%29</li>
-              <li>http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/</li>
+              <li>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator</li>
+              <li>https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment</li>
+              <li>https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise</li>
+              <li>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes</li>
+              <li>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function*</li>
+              <li>https://learn.jquery.com/using-jquery-core/</li>
             </ul>
           </section>
           <section>
